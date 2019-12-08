@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 
 
 # Utils
+
+
 def getLikesAndDislikes(soup):
     likes_and_dislikes = []
     french_titles = ["J'aime ce contenu", "Je n'aime pas ce contenu"]
@@ -89,7 +91,7 @@ def getViews(soup):
     return int(soup.find('meta', itemprop='interactionCount').get('content'))
 
 
-def getFeatures(url):
+def getFeatures(url='https://www.youtube.com/watch?v=Ugs9HASX4rA'):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -107,8 +109,3 @@ def getFeatures(url):
         features[name] = getter(soup)
 
     return features
-
-
-# Script
-url = 'https://www.youtube.com/watch?v=Ugs9HASX4rA'
-print(getFeatures(url))
