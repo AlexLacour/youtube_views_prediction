@@ -91,6 +91,22 @@ def getViews(soup):
     return int(soup.find('meta', itemprop='interactionCount').get('content'))
 
 
+def getChannelSubscribers(soup):
+    sub_count_raw = soup.find('span', tabindex="0").get_text().split()
+    sub_count = float(sub_count_raw[0].replace(',', '.'))
+    if(len(sub_count_raw) >= 2):
+        if(sub_count_raw[1] == 'k'):
+            sub_power = 1000
+        elif(sub_count_raw[1] == 'M'):
+            sub_power = 1000000
+    sub_count *= sub_power
+    return int(sub_count)
+
+
+def getChannelName(soup):
+    return soup.find('meta', property='og:title').get('content')
+
+
 def getFeatures(url='https://www.youtube.com/watch?v=Ugs9HASX4rA'):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
@@ -103,9 +119,21 @@ def getFeatures(url='https://www.youtube.com/watch?v=Ugs9HASX4rA'):
                      'imageurl', 'description', 'channelid',
                      'duration', 'familyfriendly', 'uploaddate',
                      'datepublished', 'genre', 'views']
+    channelFeaturesGetters = [getChannelName, getChannelSubscribers]
+    channelFeaturesNames = ['channelname', 'subscribers']
 
     features = {}
     for name, getter in zip(featuresNames, featuresGetters):
         features[name] = getter(soup)
 
+    channel_url = 'https://www.youtube.com/channel/' + features['channelid']
+    channel_page = requests.get(channel_url)
+    channel_soup = BeautifulSoup(channel_page.content, 'html.parser')
+
+    for name, getter in zip(channelFeaturesNames, channelFeaturesGetters):
+        features[name] = getter(channel_soup)
+
     return features
+
+
+print(getFeatures())
