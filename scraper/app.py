@@ -1,27 +1,14 @@
-from flask import Flask
+from flask import Flask, request, redirect
 import myScraper as scrap
 
 app = Flask(__name__)
 
 
-@app.route('/')
-def Hello():
-    return 'Hello World !'
-
-
-@app.route('/scrap')
+@app.route('/scrap', methods=['GET', 'POST'])
 def getFeatures():
-    return scrap.getFeatures()
+    dataScraped = scrap.getFeatures()
+    print(dataScraped)
+    return dataScraped
 
 
-"""
-@app.route('/function/<parameter>')
-
-export FLASK_APP=app.py
-export FLASK_ENV=development
-flask run
-
-set FLASK_APP=app.py
-set FLASK_ENV=development
-flask run
-"""
+app.run(port=5000, threaded=True)
