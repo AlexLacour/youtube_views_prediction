@@ -1,32 +1,27 @@
-version: "3"
-
+version: '3'
 services:
-
-  mongo:
-    image: mongo
-    ports:
-      - 27017:27017
-    networks:
-      - back-end
-
-
-  client:
-    build: client/
-    command: python3 ./client.py
-    networks:
-      - front-end
-
   scrapper:
-    build: scrapper/ 
-    command: python3 ./myScrapper.py
-    # ports:
-    #   - 1234:1234
-    networks:
-     - back-end
+    container_name: scrapper
+    restart: always
+    build: ./scrapper/
+    ports:
+      - '5333:5333'
+    # links:
+      # - mongo
+  front:
+    container_name: node
+    restart: always
+    build: ./front/
+    ports:
+      - '80:5333'
+    links:
+      - scrapper
+    ## volumes:
+    ##    - .:/code
+  # mongo:
+  #   container_name: mongo
+  #   image: mongo
+  #   ports:
+  #     - '27017:27017'
 
-volumes:
-  db-data:
 
-networks:
-  front-end:
-  back-end:

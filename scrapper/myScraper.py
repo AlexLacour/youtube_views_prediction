@@ -1,10 +1,9 @@
 # Imports
 import requests
 from bs4 import BeautifulSoup
-
+import socket
 
 # Utils
-
 
 def getLikesAndDislikes(soup):
     likes_and_dislikes = []
@@ -16,35 +15,27 @@ def getLikesAndDislikes(soup):
 
     return likes_and_dislikes
 
-
 def getLikes(soup):
     return int(''.join(getLikesAndDislikes(soup)[0].split()))
 
-
 def getDislikes(soup):
     return int(''.join(getLikesAndDislikes(soup)[1].split()))
-
 
 def getTags(soup):
     return [tag.get('content') for tag in
             list(soup.find_all('meta', property='og:video:tag'))]
 
-
 def getTitle(soup):
     return soup.find('meta', property='og:title').get('content')
-
 
 def getImageUrl(soup):
     return soup.find('meta', property='og:image').get('content')
 
-
 def getDescription(soup):
     return soup.find('meta', property='og:description').get('content')
 
-
 def getChannelId(soup):
     return soup.find('meta', itemprop='channelId').get('content')
-
 
 def getDuration(soup):
     duration = soup.find('meta', itemprop='duration').get('content')
@@ -70,26 +61,20 @@ def getDuration(soup):
 
     return effective_duration
 
-
 def getIsFamilyFriendly(soup):
     return soup.find('meta', itemprop='isFamilyFriendly').get('content')
-
 
 def getUploadDate(soup):
     return soup.find('meta', itemprop='uploadDate').get('content')
 
-
 def getDatePublished(soup):
     return soup.find('meta', itemprop='datePublished').get('content')
-
 
 def getGenre(soup):
     return soup.find('meta', itemprop='genre').get('content')
 
-
 def getViews(soup):
     return int(soup.find('meta', itemprop='interactionCount').get('content'))
-
 
 def getFeatures(url='https://www.youtube.com/watch?v=Ugs9HASX4rA'):
     page = requests.get(url)
@@ -109,3 +94,21 @@ def getFeatures(url='https://www.youtube.com/watch?v=Ugs9HASX4rA'):
         features[name] = getter(soup)
 
     return features
+
+
+
+socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+socket.bind(('', 5333))
+
+while True:
+        socket.listen(5)
+        client, address = socket.accept()
+        print "{} connected".format( address )
+
+        response = client.recv(255)
+        if response != "":
+                print response
+
+print "Scrapper closed"
+client.close()
+stock.close()
