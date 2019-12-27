@@ -5,7 +5,7 @@ import pickle
 import random
 
 
-def create_model(n_features):
+def create_model():
     model = LinearRegression()
 
     return model
@@ -48,7 +48,7 @@ def train_model(X, y):
 
 
 def process_features(features):
-    with open('genres.pkl') as genres_file:
+    with open('genres.pkl', 'rb') as genres_file:
         genres = pickle.load(genres_file)
         genre_to_index = {v: k for k, v in genres.items()}
 
@@ -58,15 +58,22 @@ def process_features(features):
         features_processed.append(features['likes'] / features['dislikes'])
         features_processed.append(features['datepublished'].split('-')[1])
         features_processed.append(genre_to_index[features['genre'].lower()])
+        features_processed.append(int(features['title'].isupper()))
+
+        features_processed = np.asarray(features_processed, dtype='float32')
+        features_processed = np.expand_dims(features_processed, 0)
     return features_processed
 
 
-def view_prediction(data_filepath, features):
+def view_prediction(features, data_filepath='../data.json'):
     X, y = get_data(data_filepath)
     model = train_model(X, y)
 
     features_processed = process_features(features)
-    prediction = model.predict(np.asarray(features_processed))
+
+    print(features_processed)
+
+    prediction = np.squeeze(model.predict(features_processed))
 
     return prediction
 
