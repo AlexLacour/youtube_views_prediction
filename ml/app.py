@@ -18,7 +18,9 @@ def getFeatures():
 
     print(result)
 
-    return result
+    output = 'View prediction = ' + result
+
+    return output
 
 
-app.run(port=5001)
+app.run()
