@@ -1,16 +1,15 @@
-FROM ubuntu:16.04
+FROM python:3.7.2-slim
 
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev
-
-COPY ./requirements.txt /app/requirements.txt
-
+RUN mkdir /app
 WORKDIR /app
 
-RUN pip install -r requirements.txt
+COPY requirements.txt requirements.txt
+RUN python3 -m  pip install -r requirements.txt
 
-COPY . /app
+COPY . .
 
-ENTRYPOINT [ "python" ]
+VOLUME ["/app/public"]
 
-CMD [ "app.py" ]
+# CMD flask run --host=0.0.0.0 --port=5000
+
+CMD ["python3", "app.py" ]

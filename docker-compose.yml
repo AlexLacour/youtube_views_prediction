@@ -1,31 +1,16 @@
-
+version: '3'
 services:
-    scraper:
-      build: .
-      env_file:
-        - ml.env
-      ports:
-        - '5000:5000'
-      volumes:
-        - '.:/app'
-      expose:
-        5000
-  
-  
-  
-    ml:
-      build: ./ml
-      depends_on:
-        - scraper
-      env_file:
-        - calculator.env
-      ports:
-        - '5001:5000'
-      volumes:
-        - './ml:/app'
-      expose:
-        5001
-  
-#   networks:
-#     my_network:
-#       driver: bridge
+  scraper:
+    container_name: scraper
+    restart: always
+    build: ./scraper/
+    ports:
+      - '5000:5000'
+    # links:
+      # - mongo
+  ml:
+    container_name: ml
+    restart: always
+    build: ./ml/
+    ports:
+      - '5001:5001'

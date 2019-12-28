@@ -5,9 +5,9 @@ import os
 
 app = Flask(__name__)
 
-route('/ml')
+@app.route('/')
 def getFeatures():
-    features = requests.get(url='http://127.0.0.1:5000/scrap').json()
+    features = requests.get(url='http://0.0.0.0:5000/').json()
     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
     json_url = os.path.join(SITE_ROOT, '../data.json')
 
@@ -25,21 +25,21 @@ def getFeatures():
 app.run(port = 5001)
 
 
-socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-socket.bind(('', 5333))
+# socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# socket.bind(('', 5001))
 
-while True:
-        socket.listen(5)
-        client, address = socket.accept()
-        print "{} connected".format( address )
+# while True:
+#         socket.listen(5)
+#         client, address = socket.accept()
+#         print "{} connected".format( address )
 
-        response = client.recv(255)
-        if response != "":
-                print response
+#         response = client.recv(255)
+#         if response != "":
+#                 print response
 
-print "Scrapper closed"
-client.close()
-stock.close()
+# print "Scrapper closed"
+# client.close()
+# stock.close()
 
 # @app.route('/ml')
 # def getFeatures():
