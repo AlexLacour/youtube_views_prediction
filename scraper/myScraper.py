@@ -107,7 +107,7 @@ def getChannelName(soup):
     return soup.find('meta', property='og:title').get('content')
 
 
-def getFeatures(url='https://www.youtube.com/watch?v=Ugs9HASX4rA'):
+def getFeatures(url):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -136,4 +136,4 @@ def getFeatures(url='https://www.youtube.com/watch?v=Ugs9HASX4rA'):
     return features
 
 
-print(getFeatures())
+# print(getFeatures())
