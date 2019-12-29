@@ -1,16 +1,21 @@
 version: '3'
 services:
-  scraper:
-    container_name: scraper
-    restart: always
-    build: ./scraper/
-    ports:
-      - '5000:5000'
-    # links:
-      # - mongo
-  ml:
-    container_name: ml
-    restart: always
-    build: ./ml/
-    ports:
-      - '5001:5001'
+    scraper:
+        container_name: scraper
+        restart: always
+        build: ./scraper/
+        ports:
+            - '5000:5000'
+
+    ml:
+        container_name: ml
+        restart: always
+        build: ./ml/
+        ports:
+            - '5001:5001'
+
+    mongo:
+        container_name: mongo
+        build: ./yt_data/
+        ports:
+            - '27017:27017'

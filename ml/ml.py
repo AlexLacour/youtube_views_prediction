@@ -22,8 +22,7 @@ def get_data(filepath):
     titles_caps = []
     views = []
 
-    for index in data:
-        element = data[str(index)]
+    for element in data:
         likes.append(element['likes'])
         dislikes.append(element['dislikes'])
         ld_ratios.append(element['ld_ratio'])

@@ -6,4 +6,8 @@ WORKDIR /data
 
 EXPOSE 27017
 
-# CMD mongoimport --db yt_db --collection projet_cs --file data.json --jsonArray 
+# docker build -t mongo_img .
+# docker run -d -p 27017:27017 --name mongodb mongo_img
+# docker exec -it mongodb bash
+# # mongoimport --db yt_db --collection projet_cs --file data.json --jsonArray
+# # mongo
