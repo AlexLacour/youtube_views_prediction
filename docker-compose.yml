@@ -1,21 +1,25 @@
 version: '3'
 services:
-    scraper:
-        container_name: scraper
-        restart: always
-        build: ./scraper/
-        ports:
-            - '5000:5000'
+    # scraper:
+    #     container_name: scraper
+    #     restart: always
+    #     build: ./scraper/
+    #     ports:
+    #         - "5000:5000"
 
-    ml:
-        container_name: ml
-        restart: always
-        build: ./ml/
-        ports:
-            - '5001:5001'
-
+    # ml:
+    #     container_name: ml
+    #     restart: always
+    #     build: ./ml/
+    #     ports:
+    #         - "5001:5001"
+ 
     mongo:
         container_name: mongo
         build: ./yt_data/
         ports:
-            - '27017:27017'
+            - "27017:27017"
+        # command:
+        #     sh ./import.sh
+        # command:
+        #     bash -c 'mongoimport --db yt_db --collection projet_cs --type json --file data.json --jsonArray'
