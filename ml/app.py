@@ -10,11 +10,22 @@ app = Flask(__name__)
 @app.route('/')
 def getFeatures():
     client = MongoClient('192.168.99.101', 27017)
-    features = requests.get(url='http://scraper:5000/').json()
+    try:
+        features = requests.get(url='http://192.168.99.101:5000/').json()
+    except Exception:
+        return 'Scraping Failed'
 
     print('Prediction started')
 
-    result = str(ml.view_prediction(features, client.yt_db['projet_cs']))
+    try:
+        data = client.yt_db['projet_cs'].find({})
+    except Exception:
+        return 'DB Failed'
+
+    try:
+        result = str(ml.view_prediction(features, data))
+    except Exception:
+        return 'ML Failed'
 
     print(result)
 
