@@ -2,19 +2,19 @@ from flask import Flask
 import requests
 import ml
 import os
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def getFeatures():
+    client = MongoClient('192.168.99.101', 27017)
     features = requests.get(url='http://scraper:5000/').json()
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__)) #hea
-    json_url = os.path.join(SITE_ROOT, 'data.json') #HEA too
 
     print('Prediction started')
 
-    result = str(ml.view_prediction(features, json_url))
+    result = str(ml.view_prediction(features, client.yt_db['projet_cs']))
 
     print(result)
 

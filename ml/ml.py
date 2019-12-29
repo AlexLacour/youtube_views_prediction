@@ -11,9 +11,7 @@ def create_model():
     return model
 
 
-def get_data(filepath):
-    with open(filepath, 'r') as file:
-        data = json.load(file)
+def get_data(data):
     likes = []
     dislikes = []
     ld_ratios = []
@@ -64,8 +62,8 @@ def process_features(features):
     return features_processed
 
 
-def view_prediction(features, data_filepath='../data.json'):
-    X, y = get_data(data_filepath)
+def view_prediction(features, data):
+    X, y = get_data(data)
     model = train_model(X, y)
 
     features_processed = process_features(features)
