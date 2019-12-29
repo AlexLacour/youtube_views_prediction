@@ -1,16 +1,46 @@
-version: '3'
+version: '3.5'
 services:
-  scraper:
-    container_name: scraper
-    restart: always
-    build: ./scraper/
+
+  front:
+    container_name: front
+    build: ./front/
     ports:
-      - '5000:5000'
-    # links:
-      # - mongo
+      - "80:200"
+    networks:
+      - frontend
   ml:
     container_name: ml
     restart: always
     build: ./ml/
     ports:
-      - '5001:5001'
+      - "5001:5001"
+    networks:
+      - backend
+
+  scraper:
+    container_name: scraper
+    restart: always
+    build: ./scraper/
+    ports:
+      - "5000:5000"
+    networks:
+      - backend
+      - frontend
+
+  # mongo:
+  #   build: ./mongo
+  #   restart: always
+  #   volumes:
+  #     - ./mongo/data:/data/db #Helps to store MongoDB data in `./mongo/data`
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: USERNAME
+  #     MONGO_INITDB_ROOT_PASSWORD: PWD
+#       MONGO_INITDB_DATABASE: yt_data 
+
+# networks:
+#   dev:
+#     name: dev
+    # driver: bridge
+networks: 
+  backend:
+  frontend:

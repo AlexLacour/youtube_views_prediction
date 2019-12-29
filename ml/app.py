@@ -8,9 +8,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def getFeatures():
-    features = requests.get(url='http://127.0.0.1:5000/').json()
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(SITE_ROOT, '../data.json')
+    features = requests.get(url='http://scraper:5000/').json()
+    SITE_ROOT = os.path.realpath(os.path.dirname(__file__)) #hea
+    json_url = os.path.join(SITE_ROOT, 'data.json') #HEA too
 
     print('Prediction started')
 
