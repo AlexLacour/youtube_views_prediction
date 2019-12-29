@@ -1,38 +1,77 @@
-from flask import Flask
-import requests
+from flask import Flask, request
 import ml
-import os
 from pymongo import MongoClient
+import pickle
+from datetime import date
+import requests
 
 app = Flask(__name__)
 
 
-@app.route('/')
+def create_features_to_insert(features):
+    with open('genres.pkl', 'rb') as genres_file:
+        genres = pickle.load(genres_file)
+        genre_to_index = {v: k for k, v in genres.items()}
+
+        features_to_insert = {}
+        features_to_insert['likes'] = features['likes']
+        features_to_insert['dislikes'] = features['dislikes']
+        features_to_insert['ld_ratio'] = features['likes'] / \
+            (features['dislikes'] + 1)
+        features_to_insert['date'] = features['datepublished']
+        features_to_insert['genre'] = genre_to_index[features['genre'].lower()]
+        features_to_insert['is_title_all_caps'] = int(
+            features['title'].isupper())
+
+        features_to_insert['views'] = features['views']
+
+    return features_to_insert
+
+
+def db_insert_new_video(features, data):
+    features_to_insert = create_features_to_insert(features)
+    today_date = date.today()
+    video_date_published = [int(x)
+                            for x in features['datepublished'].split('-')]
+    video_date = date(video_date_published[0],
+                      video_date_published[1],
+                      video_date_published[2])
+
+    age_of_video = (today_date - video_date).days
+
+    if(age_of_video > 30):
+        data.insert_one(features_to_insert)
+
+
+@app.route('/ml')
 def getFeatures():
-    client = MongoClient('192.168.99.101', 27017)
-    try:
-        features = requests.get(url='http://192.168.99.101:5000/').json()
-    except Exception:
-        return 'Scraping Failed'
+    if(request.method == 'POST'):
+        client = MongoClient('192.168.99.100', 27017)
+        try:
+            # features = requests.get(url='http://192.168.99.100:5000/').json()
+            features = request.args
+        except Exception:
+            return 'Scraping Failed'
 
-    print('Prediction started')
+        try:
+            data = client.yt_db['projet_cs']
+        except Exception:
+            return 'DB Failed'
 
-    try:
-        data = client.yt_db['projet_cs'].find({})
-    except Exception:
-        return 'DB Failed'
+        try:
+            result = str(ml.view_prediction(features, data.find({})))
+        except Exception:
+            return 'ML Failed'
 
-    try:
-        result = str(ml.view_prediction(features, data))
-    except Exception:
-        return 'ML Failed'
+        db_insert_new_video(features, data)
 
-    print(result)
+        final_result = {'views': result}
 
-    output = 'View prediction = ' + result
+        requests.post(url='http://192.168.99.100:5002/front',
+                      data=final_result)
 
-    return output
+    return 'ML'
 
 
 if(__name__ == '__main__'):
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=5001, threaded=True)

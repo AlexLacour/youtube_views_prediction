@@ -1,21 +1,18 @@
 version: '3.5'
 services:
+  front:
+    container_name: front_tmp
+    restart: always
+    build: ./front_tmp/
+    ports:
+      - "5002:5002"
 
-  # frontend:
-    # front:
-      # container_name: front
-      # build: ./front/
-      # ports:
-        # - "80:200"
-      # networks:
   scraper:
     container_name: scraper
     restart: always
     build: ./scraper/
     ports:
       - "5000:5000"
-    networks:
-      - backend
 
   ml:
     container_name: ml
@@ -23,8 +20,6 @@ services:
     build: ./ml/
     ports:
       - "5001:5001"
-    networks:
-      - backend
  
   mongo:
     container_name: mongo
@@ -32,8 +27,4 @@ services:
     build: ./yt_data/
     ports:
       - "27017:27017"
-    networks:
-      - backend
 
-networks: 
-    backend:
