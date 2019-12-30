@@ -4,7 +4,7 @@ __COMMANDES POUR RUN LE PROJET__
 
 Au choix: 
 ```bash
-#tout run proprement (4 à 8 min pour pull les images)
+# Lance un docker-compose up et import la base de données (durée estimée : 5mn)
 sh start.sh 
 ```
  ou: 
@@ -22,15 +22,23 @@ pour relancer, vous pouvez aussi :
 ```bash
 sh restart.sh 
 ```
+
+Le front est ensuite accessible sur le port 5002 du localhost pour Linux, et de l'adresse 192.168.99.100 pour Windows avec DockerToolbox (adresse obtenue par la commande docker-machine ip default).
+
 ----------------
 ## Le fonctionnement
  ![architecture](archi.png)
  en noir les requetes, en rouge les réponses
 ----------------
 
+### Introduction
+Le but de ce projet est de prédire le nombre de vues maximum d'une vidéo youtube (nombre qu'une vidéo atteint généralement en un mois) avec un modèle de machine learning entraîné sur une base de données Kaggle (https://www.kaggle.com/mfekadu/youtube-kaggle/data). L'utilisateur entre une URL de vidéo youtube via le front, et après quelques secondes le nombre de vues prédit est affiché.
+
 ###  1- Une BDD mongo
 
-Un simple petit docker mongo, qui écoute sur son port 27017 (vous pouvez essayer de visualiser directement les data via ROBO3T si vous vous sentez aventureux). Les données sont écrites qu'une fois le docker pleinement lancé (on a eu quelques problèmes en essayant de faire des importdb *dans* le Dockerfile, d'où le docker exec mongodb ...)
+Un simple petit docker mongo, qui écoute sur son port 27017 (vous pouvez essayer de visualiser directement les data via ROBO3T si vous vous sentez aventureux). Les données sont écrites qu'une fois le docker pleinement lancé (on a eu quelques problèmes en essayant de faire des mongoimport *dans* le Dockerfile, d'où le docker exec mongodb ...).
+
+Nous avons choisi d'utiliser mongo par sa simplicité d'utilisation et sa facilité d'accès par docker et python (via la bibliothèque pymongo).
 
 Les données sont donc en format JSON:
 ```JSON
@@ -47,7 +55,7 @@ Les données sont donc en format JSON:
 
 ###  2- Un front
 
-Un script nodeJS qui sert juste à envoyer une requête au scrapper (un URL youtube), et à récuperer la prédiction. On a essayé de faire fonctionner angular (avec cli) dans un docker node mais npm boudait. (permissions *dans le docker* non accordée, puis les node_modules ne se faisaient pas au bon endroit dans le docker malgrés le WORKDIR, etc)
+Le front envoie une requête au scraper (une requête post contenant l'URL de la vidéo youtube), et récupère la prédiction du nombre de vues. On a essayé de faire fonctionner angular (avec cli) dans un docker node mais npm boudait. (permissions *dans le docker* non accordée, puis les node_modules ne se faisaient pas au bon endroit dans le docker malgrés le WORKDIR, etc). Le front est donc pour le moment un ensemble d'application Flask en python avec un affichage en html+css.
 
 ----------------
 
@@ -59,9 +67,12 @@ Un script nodeJS qui sert juste à envoyer une requête au scrapper (un URL yout
 
 ###  3- Un scraper
 
-Un bon petit scraper qui récupère toute les informations que l'on a trouvé utiles (et réalisable) pour la prédiction. Il reçoit un URL youtube, scrap des informations liées à la vidée, et envoie le JSON à la partie ML.
+Une fois l'URL recue, un programme de scraping récupère les données dont nous avons besoin. La bibliothèque BeautifulSoup4 en python est à notre connaissance la plus simple d'utilisation pour ce but.
+
+Le scraper récupère plusieurs informations sur la vidéo youtube en question (toutes ne seront pas utilisées par l'algorithme de machine learning), allant du nombre de likes/dislikes à la durée de la vidéo.
 
 ###  4- Une partie Machine Learning
 
-Elle utilise la LinearRegression de scikit learn. Elle permet en théorie de prédire, à partir des données fournies de la BDD, le nombre de vues de la requette de l'utilisateur agrémentée d'autre informations aquises par le scraper.
-Elle reçoit le JSON créé par le scraper, pull le JSON du mongo, fait un fit, puis revoie au front le résultat.
+Elle utilise la LinearRegression de scikit-learn (toujours en python), ayant déjà travaillé avec cette librairie il était plus simple pour nous de l'utiliser.
+Elle permet de prédire, à partir des données fournies de la BDD, le nombre de vues de la vidéo donnée par l'utilisateur.
+Elle reçoit le JSON créé par le scraper, s'entraîne sur la BDD Mongo, puis renvoie le résultat, en ajoutant le json fourni par le scraper à la BDD si la vidéo a plus d'un mois.
