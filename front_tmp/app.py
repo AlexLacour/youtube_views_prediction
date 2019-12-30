@@ -11,7 +11,9 @@ def getFeatures():
     result = requests.post(
         url='http://192.168.99.100:5000/scrap', data=url_to_scrap).text
 
-    return result
+    final_output = 'View prediction = ' + result
+
+    return final_output
 
 
 if(__name__ == '__main__'):
