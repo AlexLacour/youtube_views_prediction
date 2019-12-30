@@ -22,6 +22,7 @@ docker-compose down
 ----------------
 ## Le fonctionnement
  ![architecture](archi.png)
+ en noir les requetes, en rouge les réponses
 ###  1- Une BDD mongo
 
 un simple petit docker mongo, avec la petite nuance des data
