@@ -20,13 +20,13 @@ def get_data(data):
     views = []
 
     for element in data:
-        likes.append(element['likes'])
-        dislikes.append(element['dislikes'])
-        ld_ratios.append(element['ld_ratio'])
+        likes.append(int(element['likes']))
+        dislikes.append(int(element['dislikes']))
+        ld_ratios.append(float(element['ld_ratio']))
         dates.append(int(element['date'].split('-')[1]))
-        genres.append(element['genre'])
+        genres.append(int(element['genre']))
         titles_caps.append(int(element['is_title_all_caps']))
-        views.append(element['views'])
+        views.append(int(element['views']))
 
     X = list(zip(likes, dislikes, ld_ratios, dates, genres, titles_caps))
     y = views
@@ -49,11 +49,13 @@ def process_features(features):
         genre_to_index = {v: k for k, v in genres.items()}
 
         features_processed = []
-        features_processed.append(features['likes'])
-        features_processed.append(features['dislikes'])
-        features_processed.append(features['likes'] / features['dislikes'])
-        features_processed.append(features['datepublished'].split('-')[1])
-        features_processed.append(genre_to_index[features['genre'].lower()])
+        features_processed.append(int(features['likes']))
+        features_processed.append(int(features['dislikes']))
+        features_processed.append(
+            float(int(features['likes']) / int(features['dislikes'])))
+        features_processed.append(int(features['datepublished'].split('-')[1]))
+        features_processed.append(
+            int(genre_to_index[features['genre'].lower()]))
         features_processed.append(int(features['title'].isupper()))
 
         features_processed = np.asarray(features_processed, dtype='float32')
@@ -66,8 +68,6 @@ def view_prediction(features, data):
     model = train_model(X, y)
 
     features_processed = process_features(features)
-
-    print(features_processed)
 
     prediction = np.squeeze(model.predict(features_processed))
 

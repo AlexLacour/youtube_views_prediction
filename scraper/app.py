@@ -8,8 +8,8 @@ app = Flask(__name__)
 @app.route('/scrap', methods=['GET', 'POST'])
 def getFeatures():
     dataScraped = scrap.getFeatures(request.form['url'])
-    return requests.post(url='http://192.168.99.100:5001/ml', data=dataScraped)
+    return requests.post(url='http://192.168.99.100:5001/ml', data=dataScraped).text
 
 
 if(__name__ == '__main__'):
-    app.run(host='0.0.0.0', port=5000, threaded=True)
+    app.run(host='0.0.0.0', port=5000)
