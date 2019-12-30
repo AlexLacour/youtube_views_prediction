@@ -6,7 +6,7 @@ import db_functions as dbu
 app = Flask(__name__)
 
 
-@app.route('/ml', methods=['GET', 'POST'])
+@app.route('/ml', methods=['POST'])
 def getViews():
     features = request.form
 
