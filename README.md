@@ -25,14 +25,14 @@ sh restart.sh
 
 Le front est ensuite accessible sur le port 5002 du localhost pour Linux, et de l'adresse 192.168.99.100 pour Windows avec DockerToolbox (adresse obtenue par la commande docker-machine ip default).
 
+### Introduction
+Le but de ce projet est de prédire le nombre de vues maximum d'une vidéo youtube (nombre qu'une vidéo atteint généralement en un mois) avec un modèle de machine learning entraîné sur une base de données Kaggle (https://www.kaggle.com/mfekadu/youtube-kaggle/data). L'utilisateur entre une URL de vidéo youtube via le front, et après quelques secondes le nombre de vues prédit est affiché.
+
 ----------------
-## Le fonctionnement
+### Le fonctionnement
  ![architecture](archi.png)
  en noir les requetes, en rouge les réponses
 ----------------
-
-### Introduction
-Le but de ce projet est de prédire le nombre de vues maximum d'une vidéo youtube (nombre qu'une vidéo atteint généralement en un mois) avec un modèle de machine learning entraîné sur une base de données Kaggle (https://www.kaggle.com/mfekadu/youtube-kaggle/data). L'utilisateur entre une URL de vidéo youtube via le front, et après quelques secondes le nombre de vues prédit est affiché.
 
 ###  1- Une BDD mongo
 
@@ -76,3 +76,13 @@ Le scraper récupère plusieurs informations sur la vidéo youtube en question (
 Elle utilise la LinearRegression de scikit-learn (toujours en python), ayant déjà travaillé avec cette librairie il était plus simple pour nous de l'utiliser.
 Elle permet de prédire, à partir des données fournies de la BDD, le nombre de vues de la vidéo donnée par l'utilisateur.
 Elle reçoit le JSON créé par le scraper, s'entraîne sur la BDD Mongo, puis renvoie le résultat, en ajoutant le json fourni par le scraper à la BDD si la vidéo a plus d'un mois.
+
+### Améliorations
+Des améliorations graphiques peuvent être effectuées (par un front réalisé avec Angular ou Ember), ainsi qu'une amélioration de la gestion de la base de données, aujourd'hui seule source d'erreurs. En effet une erreur 500 arrive de temps en temps (provoquée par une erreur "no space left on device" lancée par le docker mongo), et peut être réglée par la commande suivante : 
+```bash
+docker volume rm $(docker volume ls -qf dangling=true)
+```
+Ou
+```bash
+docker volume prune
+```
