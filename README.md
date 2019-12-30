@@ -35,6 +35,6 @@ un script nodeJS qui sert juste à envoyer une requête au scrapper (un URL yout
 
 Assez basique, elle apprends à prédire à partir des données fournies de la BDD le le nombre de vues de la requette de l'utilisateur agrémentée d'autre informations aquises par le scraper
 
-###  4- Un scrapper
+###  4- Un scraper
 
 Un bon petit scraper qui récupère toute les informations que l'on a trouvé utiles (et réalisable) pour la prédiction.

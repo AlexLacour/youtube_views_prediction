@@ -10,7 +10,7 @@ app = Flask(__name__)
 def getViews():
     features = request.form
 
-    client = MongoClient('192.168.99.100', 27017)
+    client = MongoClient('mongodb', 27017)
 
     data = client.yt_db['projet_cs']
 
