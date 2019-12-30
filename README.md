@@ -14,7 +14,6 @@ docker-compose up --build -d
 # importe la BDD
 docker exec mongodb mongoimport --db yt_db --collection projet_cs --file data.json --jsonArray
 ```
-
 pour arreter tout les process, simplement un
 ```bash
 docker-compose down
@@ -22,7 +21,7 @@ docker-compose down
 
 ----------------
 ## Le fonctionnement
-
+ ![architecture](archi.png)
 ###  1- Une BDD mongo
 
 un simple petit docker mongo, avec la petite nuance des data
