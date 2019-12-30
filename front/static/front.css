@@ -1,0 +1,18 @@
+body {
+ 	background-color: white;
+ 	font-family: "Raleway", sans-serif;
+ 	text-align: center;
+ 	background-image:url(background.jpg);
+ 	background-repeat: no-repeat;
+ 	background-size: cover;
+}
+
+h1{
+	text-decoration: underline;
+}
+
+input{
+	width: 20%;
+	box-sizing: border-box;
+	padding: 12px 20px;
+}

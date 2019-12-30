@@ -14,12 +14,19 @@ def main_html():
 def main():
     if(request.method == 'POST'):
         url_to_scrap = {'url': request.form['url_value']}
-        result = requests.post(
-            url='http://scraper:5000/scrap', data=url_to_scrap).text
 
-        final_output = 'View prediction = ' + result
+        if(url_to_scrap['url'][0:31] != 'https://www.youtube.com/watch?v'):
+            result = "Erreur d'URL"
+        else:
+            try:
+                result_views = requests.post(
+                    url='http://scraper:5000/scrap', data=url_to_scrap).text
+                result = 'Nombre de vues estimé : ' + result_views
+            except Exception:
+                result = "Echec du scraping"
 
-        return final_output
+        return render_template('front.html', result=result)
+    return render_template('front.html')
 
 
 if(__name__ == '__main__'):

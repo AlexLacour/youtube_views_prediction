@@ -2,12 +2,22 @@
 <html>
 <head>
 	<title>TP Microservices</title>
+	<link rel="stylesheet" href="/static/front.css">
 </head>
 <body>
-	<form action="/front" method="post">
-		<p>Entrez l'url :</p>
-		<input type="text" name="url_value"/><br/>
-	</form>
-
+	<h1>TP Microservices</h1>
+	<h2>
+		<form action="/front" method="post">
+			<p>
+				Entrez l'URL de la vidéo dont vous souhaitez prédire le nombre de vues
+			</p>
+			<input type="text" name="url_value"/><br/>
+		</form>
+	</h2>
+	<h3>
+		{% if result %}
+			{{ result }}
+		{% endif %}
+	</h3>
 </body>
 </html>
