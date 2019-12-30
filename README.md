@@ -2,19 +2,27 @@
 
 __COMMANDES POUR RUN LE PROJET__
 
+Au choix: 
 ```bash
 #tout run proprement (4 à 8 min pour pull les images)
 sh start.sh 
-
-# Run tout les dockers (non recommandé car la base mongo sera vide)
-docker-compose up
-
-#arreter tout les process, simplement un 
+```
+ ou: 
+```bash
+# Run tout les dockers (non recommandé)
+docker-compose up --build -d 
+# importe la BDD
+docker exec mongodb mongoimport --db yt_db --collection projet_cs --file data.json --jsonArray
+```
+pour arreter tout les process, simplement un
+```bash
 docker-compose down
 ```
+
 ----------------
 ## Le fonctionnement
-
+ ![architecture](archi.png)
+ en noir les requetes, en rouge les réponses
 ###  1- Une BDD mongo
 
 un simple petit docker mongo, avec la petite nuance des data
