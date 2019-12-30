@@ -1,9 +1,9 @@
 version: '3'
 services:
   front:
-    container_name: front_KC
+    container_name: front
     restart: always
-    build: ./front_KC/
+    build: ./front/
     ports:
       - "5002:5002"
 
