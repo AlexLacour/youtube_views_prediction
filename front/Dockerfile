@@ -1,12 +1,13 @@
-FROM node:8.7-alpine
+FROM python:3.7.2-slim
 
-RUN mkdir -p /srv/app/directory
-WORKDIR /srv/app/directory
+EXPOSE 5002
 
-COPY package.json /srv/app/directory
-COPY package-lock.json /srv/app/directory
+RUN mkdir /app
+WORKDIR /app
 
-RUN npm install 
-COPY . /srv/app/directory
+COPY requirements.txt /app/requirements.txt
+RUN pip install -r requirements.txt
 
-CMD [ "npm" , "start"]
+COPY . /app
+
+CMD python3 app.py
