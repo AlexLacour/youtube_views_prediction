@@ -21,10 +21,9 @@ services:
     ports:
       - "5001:5001"
  
-  mongo:
-    container_name: mongo
+  mongodb:
+    container_name: mongodb
     restart: always
     build: ./yt_data/
     ports:
       - "27017:27017"
-

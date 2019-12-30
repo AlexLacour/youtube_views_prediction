@@ -5,12 +5,10 @@ import requests
 app = Flask(__name__)
 
 
-@app.route('/scrap')
+@app.route('/scrap', methods=['GET', 'POST'])
 def getFeatures():
-    if(request.method == 'POST'):
-        dataScraped = scrap.getFeatures(request.args['url'])
-        requests.post(url='http://192.168.99.100:5001/ml', data=dataScraped)
-    return 'Scraping'
+    dataScraped = scrap.getFeatures(request.form['url'])
+    return requests.post(url='http://192.168.99.100:5001/ml', data=dataScraped)
 
 
 if(__name__ == '__main__'):

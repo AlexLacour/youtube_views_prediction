@@ -119,19 +119,20 @@ def getFeatures(url):
                      'imageurl', 'description', 'channelid',
                      'duration', 'familyfriendly', 'uploaddate',
                      'datepublished', 'genre', 'views']
-    channelFeaturesGetters = [getChannelName, getChannelSubscribers]
-    channelFeaturesNames = ['channelname', 'subscribers']
 
     features = {}
     for name, getter in zip(featuresNames, featuresGetters):
         features[name] = getter(soup)
 
-    channel_url = 'https://www.youtube.com/channel/' + features['channelid']
-    channel_page = requests.get(channel_url)
-    channel_soup = BeautifulSoup(channel_page.content, 'html.parser')
+    # channel_url = 'https://www.youtube.com/channel/' + features['channelid']
+    # channel_page = requests.get(channel_url)
+    # channel_soup = BeautifulSoup(channel_page.content, 'html.parser')
 
-    for name, getter in zip(channelFeaturesNames, channelFeaturesGetters):
-        features[name] = getter(channel_soup)
+    # channelFeaturesGetters = [getChannelName, getChannelSubscribers]
+    # channelFeaturesNames = ['channelname', 'subscribers']
+
+    # for name, getter in zip(channelFeaturesNames, channelFeaturesGetters):
+    #     features[name] = getter(channel_soup)
 
     return features
 

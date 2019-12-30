@@ -3,7 +3,6 @@ import ml
 from pymongo import MongoClient
 import pickle
 from datetime import date
-import requests
 
 app = Flask(__name__)
 
@@ -43,34 +42,19 @@ def db_insert_new_video(features, data):
         data.insert_one(features_to_insert)
 
 
-@app.route('/ml')
-def getFeatures():
-    if(request.method == 'POST'):
-        client = MongoClient('192.168.99.100', 27017)
-        try:
-            # features = requests.get(url='http://192.168.99.100:5000/').json()
-            features = request.args
-        except Exception:
-            return 'Scraping Failed'
+@app.route('/ml', methods=['GET', 'POST'])
+def getViews():
+    features = request.form
 
-        try:
-            data = client.yt_db['projet_cs']
-        except Exception:
-            return 'DB Failed'
+    client = MongoClient('192.168.99.100', 27017)
 
-        try:
-            result = str(ml.view_prediction(features, data.find({})))
-        except Exception:
-            return 'ML Failed'
+    data = client.yt_db['projet_cs']
 
-        db_insert_new_video(features, data)
+    result = int(ml.view_prediction(features, data.find({})))
 
-        final_result = {'views': result}
+    db_insert_new_video(features, data)
 
-        requests.post(url='http://192.168.99.100:5002/front',
-                      data=final_result)
-
-    return 'ML'
+    return str(result)
 
 
 if(__name__ == '__main__'):

@@ -1,17 +1,15 @@
-from flask import Flask, request
+from flask import Flask
 import requests
+
 
 app = Flask(__name__)
 
 
-@app.route('/front')
+@app.route('/front', methods=['GET', 'POST'])
 def getFeatures():
-    result = None
-
-    url = {'url': 'https://www.youtube.com/watch?v=Ugs9HASX4rA'}
-    requests.post(url='http://192.168.99.100:5000/scrap', data=url)
-
-    # result = await request.get_json()
+    url_to_scrap = {'url': 'https://www.youtube.com/watch?v=Ugs9HASX4rA'}
+    result = requests.post(
+        url='http://192.168.99.100:5000/scrap', data=url_to_scrap).text
 
     return result
 
