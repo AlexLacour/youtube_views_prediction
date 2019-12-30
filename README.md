@@ -45,8 +45,6 @@ Les données sont donc en format JSON:
 }
 ```
 
-----------------
-
 ###  2- Un front
 
 Un script nodeJS qui sert juste à envoyer une requête au scrapper (un URL youtube), et à récuperer la prédiction. On a essayé de faire fonctionner angular (avec cli) dans un docker node mais npm boudait. (permissions *dans le docker* non accordée, puis les node_modules ne se faisaient pas au bon endroit dans le docker malgrés le WORKDIR, etc)
@@ -56,6 +54,8 @@ Un script nodeJS qui sert juste à envoyer une requête au scrapper (un URL yout
 *Les deux dockers suivants sont construits sur l'image python:3.7.2-slim, (alpine ne fonctionnait pas mais on voulait tout de même une version assez légère, avec python3 ).*
 
 *Pour faire des modifications sur ces dockers, il suffit d'ajouter les nouvelles libs utilisées dans le requirements.txt du conteneur, et modifier (ou ajouter) les scripts python.*
+
+----------------
 
 ###  3- Un scraper
 
