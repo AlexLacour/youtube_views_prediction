@@ -86,3 +86,5 @@ Ou
 ```bash
 docker volume prune
 ```
+
+Projet réalisé par Alexandre Lacour et Hippolyte Foussat, Majeure intelligence artificielle ESME Sudria 2019/2020.
